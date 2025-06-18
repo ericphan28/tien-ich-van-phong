@@ -111,9 +111,10 @@ export class ModuleStore implements ModuleStoreAPI {
       version: manifest.version,
       message: 'Module published successfully'
     };
-  }  async updateModule(moduleId: string, version: string, packageFile: File): Promise<UpdateResult> {
-    // Placeholder implementation - packageFile would be used in real implementation
-    console.log('Updating module:', moduleId, 'to version:', version, 'with package:', packageFile.name);
+  }
+  async updateModule(moduleId: string, version: string, packageFile: File): Promise<UpdateResult> {
+    // Placeholder implementation
+    console.log('Updating module:', moduleId, 'version:', version, 'file size:', packageFile.size);
     return {
       success: true,
       newVersion: version,
@@ -143,8 +144,8 @@ export class ModuleStore implements ModuleStoreAPI {
     throw new Error(`Module download not implemented for: ${moduleId} v${version}`);
   }
   async verifyModule(modulePackage: ModulePackage): Promise<VerificationResult> {
-    // Placeholder implementation - would verify package signature and content
-    console.log('Verifying module package:', modulePackage.manifest.id);
+    // Placeholder implementation
+    console.log('Verifying module:', modulePackage.manifest.id, 'v' + modulePackage.manifest.version);
     return {
       isValid: true,
       isSecure: true,
@@ -156,7 +157,7 @@ export class ModuleStore implements ModuleStoreAPI {
     };
   }
   async submitForReview(moduleId: string): Promise<ReviewSubmission> {
-    // Placeholder implementation - would submit module for review
+    // Placeholder implementation
     console.log('Submitting module for review:', moduleId);
     return {
       submissionId: `review-${Date.now()}`,
@@ -164,8 +165,9 @@ export class ModuleStore implements ModuleStoreAPI {
       submittedAt: new Date()
     };
   }
+
   async getReviewStatus(moduleId: string): Promise<ReviewStatus> {
-    // Placeholder implementation - would check review status
+    // Placeholder implementation
     console.log('Getting review status for:', moduleId);
     return {
       status: 'approved',

@@ -6,6 +6,7 @@
 import { program } from 'commander';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
 import { createHash } from 'crypto';
 
@@ -310,7 +311,7 @@ function startDevServer(modulePath: string, options: any) {
 
 // Template system
 function getModuleTemplate(templateType: string): Record<string, string> {
-  const baseTemplate = {
+  const baseTemplate: Record<string, string> = {
     'package.json': `{
   "name": "{{MODULE_ID}}",
   "version": "1.0.0",
@@ -543,4 +544,3 @@ export function useModuleState<T>(sdk: ModuleSDK, key: string, defaultValue: T) 
 program.parse();
 
 export { createModule, buildModule, testModule, packageModule, validateModule, publishModule, installModule, startDevServer };
-`

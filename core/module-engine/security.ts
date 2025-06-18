@@ -1,5 +1,5 @@
 // Security scanner for module packages
-import { ModuleFile, PackageValidationResult } from './packaging';
+import { ModuleFile } from './packaging';
 import { ThirdPartyModuleManifest } from './sdk';
 
 export interface SecurityScanResult {

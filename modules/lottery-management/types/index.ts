@@ -107,7 +107,7 @@ export interface AlgorithmConfig {
   name: string;
   description: string;
   weight: number;           // Trọng số trong tổng hợp
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   isEnabled: boolean;
 }
 
@@ -144,7 +144,7 @@ export interface LotteryService {
   getResults(filters: ResultFilters): Promise<LotteryResult[]>;
   addResult(result: Omit<LotteryResult, 'id' | 'createdAt'>): Promise<LotteryResult>;
   getStatistics(numbers: string[], period: number): Promise<NumberStatistic[]>;
-  generatePredictions(algorithm: string, config: any): Promise<PredictionResult[]>;
+  generatePredictions(algorithm: string, config: Record<string, unknown>): Promise<PredictionResult[]>;
 }
 
 export interface ResultFilters {
@@ -181,7 +181,7 @@ export interface LotteryNotification {
   type: 'result' | 'prediction' | 'win' | 'system';
   title: string;
   message: string;
-  data?: any;
+  data?: unknown;
   read: boolean;
   createdAt: Date;
 }

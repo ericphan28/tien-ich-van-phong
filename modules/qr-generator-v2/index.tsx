@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useModuleState } from './hooks/useModuleState';
 
 export interface QrGeneratorV2Props {
-  // Define your props here
+  className?: string;
 }
 
-export default function QrGeneratorV2(props: QrGeneratorV2Props) {
+export default function QrGeneratorV2({ className }: QrGeneratorV2Props) {
   const [text, setText] = useState('');
   const [qrSize, setQrSize] = useState(200);
-  const { state, updateState } = useModuleState({ lastGenerated: '' });
+  const { updateState } = useModuleState({ lastGenerated: '' });
 
   const generateQRCode = () => {
     updateState({ lastGenerated: text });
@@ -19,7 +19,7 @@ export default function QrGeneratorV2(props: QrGeneratorV2Props) {
     '';
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
+    <div className={`p-6 max-w-2xl mx-auto ${className || ''}`}>
       <h2 className="text-2xl font-bold mb-6 text-center">🔗 QR Code Generator V2</h2>
       
       <div className="space-y-6">

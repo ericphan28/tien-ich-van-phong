@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -13,9 +15,8 @@ class SimpleModulePackager {
     
     try {
       const modules = await fs.readdir(this.modulesDir);
-      
-      for (const module of modules) {
-        const modulePath = path.join(this.modulesDir, module);
+        for (const moduleName of modules) {
+        const modulePath = path.join(this.modulesDir, moduleName);
         const stats = await fs.stat(modulePath);
         
         if (stats.isDirectory()) {
@@ -24,12 +25,12 @@ class SimpleModulePackager {
             const manifestContent = await fs.readFile(manifestPath, 'utf-8');
             const manifest = JSON.parse(manifestContent);
             
-            console.log(`  📦 ${module} - ${manifest.name} (v${manifest.version})`);
+            console.log(`  📦 ${moduleName} - ${manifest.name} (v${manifest.version})`);
             console.log(`     🏷️  Category: ${manifest.category} | Tier: ${manifest.tier}`);
             console.log(`     📄 ${manifest.description}`);
             console.log('');
           } catch {
-            console.log(`  📦 ${module} (không có manifest.json)`);
+            console.log(`  📦 ${moduleName} (không có manifest.json)`);
           }
         }
       }
@@ -57,9 +58,11 @@ class SimpleModulePackager {
       await fs.mkdir(outputPath, { recursive: true });
         // Copy files
       await this.copyRecursive(modulePath, outputPath);
-      
-      // Copy UI dependencies
+        // Copy UI dependencies
       await this.copyUIDependencies(outputPath);
+      
+      // Fix import paths
+      await this.fixImportPaths(outputPath);
       
       // Tạo package.json
       await this.createPackageJson(outputPath, manifest);
@@ -88,6 +91,44 @@ class SimpleModulePackager {
       }
     } catch (error) {
       console.log('⚠️ Failed to copy UI components:', error.message);
+    }
+  }
+
+  async fixImportPaths(outputPath) {
+    console.log('🔧 Fixing import paths...');
+    
+    try {
+      const componentsDir = path.join(outputPath, 'components');
+      if (await fs.access(componentsDir).then(() => true).catch(() => false)) {
+        const files = await fs.readdir(componentsDir);
+        
+        for (const file of files) {
+          if (file.endsWith('.tsx') || file.endsWith('.ts')) {
+            const filePath = path.join(componentsDir, file);
+            await this.fixFileImports(filePath);
+          }
+        }
+        console.log('✅ Import paths fixed successfully');
+      }
+    } catch (error) {
+      console.log('⚠️ Failed to fix import paths:', error.message);
+    }
+  }
+
+  async fixFileImports(filePath) {
+    try {
+      let content = await fs.readFile(filePath, 'utf-8');
+      
+      // Fix relative UI component imports
+      content = content.replace(
+        /from\s+['"](\.\.\/)*components\/ui\/([^'"]+)['"]/g, 
+        "from './ui/$2'"
+      );
+      
+      await fs.writeFile(filePath, content);
+      console.log(`  📝 Fixed imports in: ${path.basename(filePath)}`);
+    } catch (error) {
+      console.log(`  ⚠️ Failed to fix imports in ${path.basename(filePath)}:`, error.message);
     }
   }
 

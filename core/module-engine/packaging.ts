@@ -150,10 +150,9 @@ export class ModulePackager {
       size: 0,
       fileCount: 0
     };
-  }
-
-  // Validate package content
-  validatePackage(files: ModuleFile[], manifest: ThirdPartyModuleManifest): PackageValidationResult {
+  }  // Validate package content
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  validatePackage(files: ModuleFile[], _manifest: ThirdPartyModuleManifest): PackageValidationResult {
     const errors: string[] = [];
     const warnings: string[] = [];
     const securityIssues: string[] = [];

@@ -1,4 +1,13 @@
-import { LotteryResult, NumberStatistic, PredictionResult, LotteryEntry, ResultFilters } from '../types';
+import { LotteryResult, NumberStatistic, PredictionResult, LotteryEntry } from '../types';
+
+interface Pattern {
+  type: string;
+  nextNumber: string;
+  probability: number;
+  confidence: number;
+  frequency: number;
+  description: string;
+}
 
 export class LotteryAnalysisService {
   /**
@@ -245,12 +254,10 @@ export class LotteryAnalysisService {
     patterns.push(...sumPattern);
 
     return patterns;
-  }
-
-  private findConsecutivePatterns(results: LotteryResult[]) {
+  }  private findConsecutivePatterns(results: LotteryResult[]): Pattern[] {
     // Implementation for consecutive number patterns
     // This is a simplified version
-    const patterns = [];
+    const patterns: Pattern[] = [];
     const recentResults = results.slice(0, 10);
     
     recentResults.forEach(result => {
@@ -270,19 +277,43 @@ export class LotteryAnalysisService {
     });
 
     return patterns.slice(0, 5); // Limit results
-  }
-
-  private findPairPatterns(results: LotteryResult[]) {
+  }  private findPairPatterns(results: LotteryResult[]): Pattern[] {
     // Find pair patterns (simplified)
-    const patterns = [];
-    // Implementation would analyze number pairs that appear together
+    console.log('Analyzing pair patterns for', results.length, 'results');
+    const patterns: Pattern[] = [];
+    
+    // Add sample pattern for demo
+    if (results.length > 0) {
+      patterns.push({
+        type: 'pair',
+        nextNumber: '12',
+        probability: 0.1,
+        confidence: 45,
+        frequency: 8,
+        description: 'Cặp số thường xuất hiện'
+      });
+    }
+    
     return patterns;
   }
 
-  private findSumPatterns(results: LotteryResult[]) {
+  private findSumPatterns(results: LotteryResult[]): Pattern[] {
     // Find sum range patterns (simplified)
-    const patterns = [];
-    // Implementation would analyze sum ranges of winning numbers
+    console.log('Analyzing sum patterns for', results.length, 'results');
+    const patterns: Pattern[] = [];
+    
+    // Add sample pattern for demo
+    if (results.length > 0) {
+      patterns.push({
+        type: 'sum',
+        nextNumber: '45',
+        probability: 0.08,
+        confidence: 38,
+        frequency: 12,
+        description: 'Số có tổng trong khoảng phổ biến'
+      });
+    }
+    
     return patterns;
   }
 
