@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useModuleState } from './hooks/useModuleState';
 
 export interface QrGeneratorV2Props {
@@ -65,11 +66,13 @@ export default function QrGeneratorV2({ className }: QrGeneratorV2Props) {
         {qrCodeUrl && (
           <div className="text-center space-y-4">
             <div className="border-2 border-border rounded-lg p-4 bg-card inline-block">
-              <img 
+              <Image 
                 src={qrCodeUrl} 
                 alt="QR Code" 
                 className="mx-auto"
-                style={{ width: qrSize, height: qrSize }}
+                width={qrSize}
+                height={qrSize}
+                unoptimized={true}
               />
             </div>
             

@@ -22,9 +22,11 @@ export default function Header({ showNavLinks = true }: HeaderProps) {
                 <span className="text-white font-bold text-sm">TV</span>
               </div>
               <span className="font-bold text-foreground text-lg transition-colors duration-300">Tiện ích Văn phòng</span>
-            </Link>
-              {showNavLinks && (
+            </Link>              {showNavLinks && (
               <div className="hidden md:flex items-center space-x-6">
+                <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-all duration-300">
+                  Dashboard
+                </Link>
                 <Link href="#features" className="text-muted-foreground hover:text-foreground transition-all duration-300">
                   Tính năng
                 </Link>
