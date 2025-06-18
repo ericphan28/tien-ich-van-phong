@@ -55,9 +55,11 @@ class SimpleModulePackager {
       // Tạo thư mục output
       const outputPath = path.join(this.outputDir, `${moduleId}-v${manifest.version}`);
       await fs.mkdir(outputPath, { recursive: true });
-      
-      // Copy files
+        // Copy files
       await this.copyRecursive(modulePath, outputPath);
+      
+      // Copy UI dependencies
+      await this.copyUIDependencies(outputPath);
       
       // Tạo package.json
       await this.createPackageJson(outputPath, manifest);
@@ -69,6 +71,23 @@ class SimpleModulePackager {
       
     } catch (error) {
       console.error(`❌ Lỗi đóng gói module ${moduleId}:`, error.message);
+    }  }
+
+  async copyUIDependencies(outputPath) {
+    console.log('📋 Copy UI dependencies...');
+    
+    const uiSourcePath = path.join(this.projectRoot, 'components', 'ui');
+    const uiDestPath = path.join(outputPath, 'components', 'ui');
+    
+    try {
+      if (await fs.access(uiSourcePath).then(() => true).catch(() => false)) {
+        await this.copyRecursive(uiSourcePath, uiDestPath);
+        console.log('✅ UI components copied successfully');
+      } else {
+        console.log('⚠️ UI components directory not found, skipping...');
+      }
+    } catch (error) {
+      console.log('⚠️ Failed to copy UI components:', error.message);
     }
   }
 
