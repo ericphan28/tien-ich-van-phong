@@ -1,0 +1,37 @@
+{
+  "id": "tax-calculator",
+  "name": "Máy tính thuế TNCN",
+  "version": "1.0.0",
+  "description": "Tính thuế thu nhập cá nhân theo luật Việt Nam 2024. Hỗ trợ tính thuế lũy tiến, giảm trừ gia cảnh và export báo cáo.",
+  "main": "index.tsx",
+  "category": "finance",
+  "tier": "free",
+  "route": "/tools/tax-calculator",
+  "icon": "📊",
+  "enabled": true,
+  "pricing": {
+    "type": "usage_based",
+    "plans": {
+      "free": {
+        "price": 0,
+        "currency": "VND",
+        "features": ["basic_calculation", "monthly_summary"]
+      },
+      "premium": {
+        "price": 99000,
+        "currency": "VND",
+        "features": ["unlimited_calculations", "export_pdf", "save_templates", "tax_optimization_tips"]
+      }
+    }
+  },
+  "limits": {
+    "free": {
+      "usage_per_month": 10,
+      "features": ["basic_calculation"]
+    },
+    "premium": {
+      "usage_per_month": "unlimited",
+      "features": ["all_features"]
+    }
+  }
+}

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Tax Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2563eb;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #374151;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f9ff;
+            border-radius: 5px;
+            border-left: 4px solid #2563eb;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .breakdown {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fef3c7;
+            border-radius: 5px;
+        }
+        .breakdown h4 {
+            margin-top: 0;
+            color: #92400e;
+        }
+        .bracket-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-family: monospace;
+        }
+        .test-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .test-buttons button {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧮 Máy Tính Thuế Thu Nhập Cá Nhân</h1>
+        
+        <!-- Test buttons -->
+        <div class="test-buttons">
+            <button onclick="testCase1()">Test: Lương 20tr, 2 phụ thuộc</button>
+            <button onclick="testCase2()">Test: Lương 50tr, 0 phụ thuộc</button>
+        </div>
+        
+        <!-- Input form -->
+        <div class="input-group">
+            <label for="income">Thu nhập tháng (VNĐ):</label>
+            <input type="number" id="income" value="20000000" oninput="calculateLive()">
+        </div>
+        
+        <div class="input-group">
+            <label for="dependents">Số người phụ thuộc:</label>
+            <input type="number" id="dependents" value="0" min="0" oninput="calculateLive()">
+        </div>
+        
+        <div class="input-group">
+            <label for="additional">Giảm trừ khác (VNĐ):</label>
+            <input type="number" id="additional" value="0" min="0" oninput="calculateLive()">
+        </div>
+        
+        <button onclick="calculateTaxes()">Tính Thuế</button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Tax calculation constants
+        const BASIC_DEDUCTION = 11000000;
+        const DEPENDENT_DEDUCTION = 4400000;
+        
+        const TAX_BRACKETS = [
+            { min: 0, max: 5000000, rate: 0.05, description: "Đến 5 triệu VNĐ - 5%" },
+            { min: 5000000, max: 10000000, rate: 0.10, description: "Từ 5-10 triệu VNĐ - 10%" },
+            { min: 10000000, max: 18000000, rate: 0.15, description: "Từ 10-18 triệu VNĐ - 15%" },
+            { min: 18000000, max: 32000000, rate: 0.20, description: "Từ 18-32 triệu VNĐ - 20%" },
+            { min: 32000000, max: 52000000, rate: 0.25, description: "Từ 32-52 triệu VNĐ - 25%" },
+            { min: 52000000, max: 80000000, rate: 0.30, description: "Từ 52-80 triệu VNĐ - 30%" },
+            { min: 80000000, max: null, rate: 0.35, description: "Trên 80 triệu VNĐ - 35%" }
+        ];
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Format percentage
+        function formatPercentage(rate) {
+            return `${(rate * 100).toFixed(2)}%`;
+        }
+
+        // Main tax calculation function
+        function calculateTax(grossIncome, dependents = 0, additionalDeductions = 0) {
+            if (grossIncome < 0) throw new Error("Thu nhập không thể âm");
+            if (dependents < 0) throw new Error("Số người phụ thuộc không thể âm");
+
+            const totalDeductions = BASIC_DEDUCTION + (dependents * DEPENDENT_DEDUCTION) + additionalDeductions;
+            const taxableIncome = Math.max(0, grossIncome - totalDeductions);
+
+            if (taxableIncome === 0) {
+                return {
+                    grossIncome,
+                    taxableIncome: 0,
+                    totalTax: 0,
+                    netIncome: grossIncome,
+                    effectiveRate: 0,
+                    breakdown: []
+                };
+            }
+
+            let remainingIncome = taxableIncome;
+            let totalTax = 0;
+            const breakdown = [];
+
+            for (let i = 0; i < TAX_BRACKETS.length; i++) {
+                const bracket = TAX_BRACKETS[i];
+                
+                if (remainingIncome <= 0) break;
+
+                let taxableInBracket;
+                if (bracket.max === null) {
+                    taxableInBracket = remainingIncome;
+                } else {
+                    const bracketRange = bracket.max - bracket.min;
+                    taxableInBracket = Math.min(remainingIncome, bracketRange);
+                }
+
+                const taxForBracket = taxableInBracket * bracket.rate;
+                totalTax += taxForBracket;
+
+                breakdown.push({
+                    bracket: i + 1,
+                    taxableAmount: taxableInBracket,
+                    rate: bracket.rate,
+                    tax: taxForBracket
+                });
+
+                remainingIncome -= taxableInBracket;
+            }
+
+            const netIncome = grossIncome - totalTax;
+            const effectiveRate = grossIncome > 0 ? totalTax / grossIncome : 0;
+
+            return {
+                grossIncome,
+                taxableIncome,
+                totalTax,
+                netIncome,
+                effectiveRate,
+                breakdown
+            };
+        }
+
+        // Display results
+        function displayResult(result) {
+            const resultDiv = document.getElementById('result');
+            
+            let html = `
+                <div class="result-item">
+                    <span>Thu nhập gộp:</span>
+                    <span>${formatCurrency(result.grossIncome)}</span>
+                </div>
+                <div class="result-item">
+                    <span>Thu nhập chịu thuế:</span>
+                    <span>${formatCurrency(result.taxableIncome)}</span>
+                </div>
+                <div class="result-item">
+                    <span>Thuế phải nộp:</span>
+                    <span style="color: #dc2626;">${formatCurrency(result.totalTax)}</span>
+                </div>
+                <div class="result-item">
+                    <span>Thu nhập ròng:</span>
+                    <span style="color: #16a34a;">${formatCurrency(result.netIncome)}</span>
+                </div>
+                <div class="result-item">
+                    <span>Tỷ lệ thuế hiệu dụng:</span>
+                    <span>${formatPercentage(result.effectiveRate)}</span>
+                </div>
+            `;
+
+            if (result.breakdown.length > 0) {
+                html += `
+                    <div class="breakdown">
+                        <h4>Chi tiết theo bậc thuế:</h4>
+                `;
+                
+                result.breakdown.forEach(item => {
+                    html += `
+                        <div class="bracket-item">
+                            <span>Bậc ${item.bracket} (${formatPercentage(item.rate)}):</span>
+                            <span>${formatCurrency(item.taxableAmount)} → ${formatCurrency(item.tax)}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            }
+
+            resultDiv.innerHTML = html;
+            resultDiv.style.display = 'block';
+        }
+
+        // Calculate taxes from form
+        function calculateTaxes() {
+            try {
+                const income = parseFloat(document.getElementById('income').value) || 0;
+                const dependents = parseInt(document.getElementById('dependents').value) || 0;
+                const additional = parseFloat(document.getElementById('additional').value) || 0;
+
+                const result = calculateTax(income, dependents, additional);
+                displayResult(result);
+                
+                // Log to console for debugging
+                console.log('Tax Calculation Result:', result);
+            } catch (error) {
+                alert('Lỗi: ' + error.message);
+            }
+        }
+
+        // Live calculation as user types
+        function calculateLive() {
+            calculateTaxes();
+        }
+
+        // Test cases
+        function testCase1() {
+            document.getElementById('income').value = '20000000';
+            document.getElementById('dependents').value = '2';
+            document.getElementById('additional').value = '0';
+            calculateTaxes();
+        }
+
+        function testCase2() {
+            document.getElementById('income').value = '50000000';
+            document.getElementById('dependents').value = '0';
+            document.getElementById('additional').value = '0';
+            calculateTaxes();
+        }
+
+        // Calculate on page load
+        window.onload = function() {
+            calculateTaxes();
+            console.log('🧮 Tax Calculator loaded!');
+            console.log('✅ Bạn có thể test bằng cách thay đổi input hoặc mở Console để xem logs');
+        };
+    </script>
+</body>
+</html>

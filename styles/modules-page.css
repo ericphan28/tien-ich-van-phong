@@ -1,0 +1,38 @@
+/* Optimized transitions specifically for modules page */
+.modules-page {
+  /* Use CSS custom properties for better performance */
+  --transition-duration: 0.3s;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modules-page * {
+  transition: 
+    background-color var(--transition-duration) var(--transition-timing),
+    color var(--transition-duration) var(--transition-timing),
+    border-color var(--transition-duration) var(--transition-timing) !important;
+}
+
+/* Disable transitions for problematic elements */
+.modules-page .animate-pulse,
+.modules-page .animate-spin,
+.modules-page [class*="animate-"] {
+  transition: none !important;
+}
+
+/* Enhanced theme transition for modules page */
+.modules-page.theme-transitioning * {
+  transition: 
+    background-color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important,
+    color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important,
+    border-color 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+
+/* Force repaint for better theme transition */
+.modules-page.theme-transitioning {
+  transform: translateZ(0);
+  will-change: background-color, color, border-color;
+}
+
+.modules-page.theme-transitioning * {
+  will-change: background-color, color, border-color;
+}

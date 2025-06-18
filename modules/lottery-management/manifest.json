@@ -1,0 +1,61 @@
+{
+  "id": "lottery-management",
+  "name": "Quản Lý Lô Đề",
+  "version": "1.0.0",
+  "description": "Module quản lý và phân tích lô đề, xổ số với các tính năng thống kê, dự đoán và báo cáo chi tiết",
+  "main": "index.tsx",
+  "category": "entertainment",
+  "tier": "premium",
+  "route": "/tools/lottery-management",
+  "icon": "🎲",
+  "enabled": true,
+  "features": [
+    "lottery_numbers_management",
+    "result_tracking",
+    "statistics_analysis",
+    "prediction_algorithms", 
+    "report_generation",
+    "data_import_export",
+    "cloud_storage"
+  ],
+  "pricing": {
+    "type": "subscription",
+    "plans": {
+      "basic": {
+        "price": 49000,
+        "currency": "VND",
+        "features": ["basic_tracking", "simple_statistics"]
+      },
+      "premium": {
+        "price": 99000,
+        "currency": "VND", 
+        "features": ["advanced_analysis", "prediction", "export_reports", "cloud_storage"]
+      }
+    }
+  },
+  "limits": {
+    "basic": {
+      "max_entries_per_month": 100,
+      "max_saved_combinations": 10
+    },
+    "premium": {
+      "max_entries_per_month": "unlimited",
+      "max_saved_combinations": "unlimited"
+    }
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "recharts": "^2.8.0",
+    "date-fns": "^2.30.0",
+    "xlsx": "^0.18.5",
+    "jspdf": "^2.5.1"
+  },
+  "author": "Module Developer",
+  "license": "MIT",
+  "tags": ["lottery", "statistics", "prediction", "entertainment"],
+  "screenshots": [
+    "screenshot1.png",
+    "screenshot2.png"
+  ],
+  "documentation": "README.md"
+}

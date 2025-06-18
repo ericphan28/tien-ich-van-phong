@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import ModuleInitializer from "@/components/module-initializer";
+import KeyboardShortcuts from "@/components/keyboard-shortcuts";
+import { ThemeTransition } from "@/components/theme-transition";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -25,15 +28,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="no-transition" suppressHydrationWarning>
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange={false}
+          storageKey="office-theme"
         >
-          {children}
+          <ThemeTransition />
+          <ModuleInitializer>
+            <KeyboardShortcuts />
+            {children}
+          </ModuleInitializer>
         </ThemeProvider>
       </body>
     </html>

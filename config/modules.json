@@ -1,0 +1,33 @@
+{
+  "modules": [
+    {
+      "id": "tax-calculator",
+      "enabled": true,
+      "config": {
+        "taxYear": 2024,
+        "defaultDeductions": {
+          "personal": 11000000,
+          "dependent": 4400000
+        },
+        "maxInsuranceBase": 46800000
+      }
+    }
+  ],
+  "categories": {
+    "finance": {
+      "name": "Tài chính",
+      "icon": "💰",
+      "description": "Các công cụ tính toán tài chính, thuế, lương"
+    },
+    "utility": {
+      "name": "Tiện ích",
+      "icon": "🔧",
+      "description": "Các công cụ tiện ích hỗ trợ công việc hàng ngày"
+    },
+    "productivity": {
+      "name": "Năng suất",
+      "icon": "⚡",
+      "description": "Công cụ tăng hiệu quả công việc"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "text-converter",
+  "name": "Text Converter",
+  "version": "1.0.0",
+  "description": "A useful office module: text-converter",
+  "author": "Your Name",
+  "main": "index.tsx",
+  "permissions": [
+    "ui.read",
+    "data.read"
+  ],
+  "category": "utility",
+  "tags": [
+    "office",
+    "productivity"
+  ],
+  "icon": "🔧",
+  "enabled": true
+}

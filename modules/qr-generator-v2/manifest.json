@@ -1,0 +1,24 @@
+{
+  "id": "qr-generator-v2",
+  "name": "QR Generator V2",
+  "version": "1.0.0",
+  "description": "Tạo QR Code cho text, URL, email, WiFi password với preview và download",
+  "author": "Office Tools Team",
+  "main": "index.tsx",
+  "permissions": [
+    "ui.read",
+    "ui.write",
+    "storage.read",
+    "storage.write"
+  ],
+  "category": "generator",
+  "tags": [
+    "office",
+    "productivity",
+    "qr-code",
+    "generator",
+    "utility"
+  ],
+  "icon": "�",
+  "enabled": true
+}
