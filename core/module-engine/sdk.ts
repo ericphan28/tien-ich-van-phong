@@ -266,3 +266,8 @@ export class ModuleSDKImpl implements ModuleSDK {
     }
   };
 }
+
+// Factory function to create SDK instance
+export function createModuleSDK(moduleId: string): ModuleSDK {
+  return new ModuleSDKImpl(moduleId);
+}

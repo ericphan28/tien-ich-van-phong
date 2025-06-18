@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { notFound } from 'next/navigation';
 import { moduleManager } from '@/core/module-engine/manager';
 
@@ -25,13 +25,25 @@ const MODULE_COMPONENTS = {
 } as const;
 
 interface ModulePageProps {
-  params: {
+  params: Promise<{
     moduleId: string;
-  };
+  }>;
 }
 
 export default function ModulePage({ params }: ModulePageProps) {
-  const { moduleId } = params;
+  const [moduleId, setModuleId] = useState<string>('');
+  
+  useEffect(() => {
+    const resolveParams = async () => {
+      const resolvedParams = await params;
+      setModuleId(resolvedParams.moduleId);
+    };
+    resolveParams();
+  }, [params]);
+  
+  if (!moduleId) {
+    return <div>Loading...</div>;
+  }
   
   console.log('🔍 ModulePage rendering for:', moduleId);
   
