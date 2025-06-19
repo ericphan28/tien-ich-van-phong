@@ -13,5 +13,15 @@ export function LogoutButton() {
     router.push("/auth/login");
   };
 
-  return <Button onClick={logout}>Logout</Button>;
+  return (
+    <Button 
+      variant="outline" 
+      size="sm" 
+      onClick={logout}
+      className="text-xs sm:text-sm px-2 sm:px-3"
+    >
+      <span className="hidden sm:inline">Đăng Xuất</span>
+      <span className="sm:hidden">Xuất</span>
+    </Button>
+  );
 }

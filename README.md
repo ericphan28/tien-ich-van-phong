@@ -1,53 +1,89 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# 🏪 Hệ thống POS - Progressive Web App
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+> **Hệ thống quản lý bán hàng đa cửa hàng với khả năng offline hoàn chỉnh**
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+## 🚀 Quick Start
 
-## Features
+### 1. Cài đặt và chạy
+```bash
+# Clone và cài đặt
+git clone [your-repo]
+cd quan-ly-ban-hang
+npm install
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+# Chạy development server
+npm run dev
+```
 
-## Demo
+### 2. Truy cập ứng dụng
+- **Web**: http://localhost:3002
+- **Mobile**: http://[YOUR-IP]:3002 (cùng mạng WiFi)
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+### 3. Cài đặt PWA
+- **Desktop**: Nhấn icon install ở thanh địa chỉ
+- **Mobile**: Menu browser → "Add to Home Screen"
 
-## Deploy to Vercel
+## 📱 Tính năng PWA
 
-Vercel deployment will guide you through creating a Supabase account and project.
+### ✨ Offline-First POS
+- ✅ Hoạt động hoàn toàn offline
+- ✅ Lưu giao dịch khi mất mạng
+- ✅ Tự động đồng bộ khi có mạng
+- ✅ Trạng thái online/offline real-time
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+### 🎯 Modules chính
+| Module | URL | Tính năng |
+|--------|-----|-----------|
+| **POS** | `/dashboard/pos` | Bán hàng offline |
+| **Sản phẩm** | `/dashboard/products` | Quản lý kho |
+| **Khách hàng** | `/dashboard/customers` | CRM |
+| **Báo cáo** | `/dashboard/reports` | Analytics |
+| **Kiểm tra PWA** | `/dashboard/offline-status` | Trạng thái |
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+## 🧪 Test PWA
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+### Desktop (Chrome/Edge)
+```
+1. Mở http://localhost:3002
+2. Tìm icon install ở thanh địa chỉ
+3. Test offline: DevTools → Network → "Offline"  
+4. Thử POS offline tại /dashboard/pos
+```
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+### Mobile
+```
+1. Kết nối cùng WiFi với máy tính
+2. Truy cập http://[IP-máy-tính]:3002
+3. Menu browser → "Add to Home Screen"
+4. Sử dụng như app native
+```
+
+## 🛠️ Production Build
+
+```bash
+npm run build
+npm start
+```
+
+## 📋 PWA Checklist
+
+- [x] ✅ Web App Manifest
+- [x] ✅ Service Worker  
+- [x] ✅ Offline POS
+- [x] ✅ Background Sync
+- [x] ✅ Install Prompt
+- [x] ✅ Mobile Responsive
+- [x] ✅ Real-time Status
+
+## 📞 Hỗ trợ
+
+- **PWA Test**: Chạy `test-pwa.bat`
+- **Docs**: Đọc `PWA_SETUP_GUIDE.md`
+- **Status**: Xem `PWA_FINAL_STATUS.md`
+
+---
+
+**🎉 PWA hoàn chỉnh - Sẵn sàng production!**
 
 ## Clone and run locally
 
