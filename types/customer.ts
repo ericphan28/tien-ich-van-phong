@@ -22,17 +22,17 @@ export interface Customer {
   isDeliveryAvailable?: boolean;
   deliveryDistance?: number;
   deliveryFee?: number;
-  // Existing fields
+  // Customer details
   group: 'VIP' | 'Regular' | 'Wholesale';
   totalOrders: number;
   totalSpent: number;
   lastVisit: string;
   joinDate: string;
+  preferredContact: 'phone' | 'email' | 'sms';
+  status: 'active' | 'inactive' | 'blocked';
   notes?: string;
   birthDate?: string;
   loyaltyPoints?: number;
-  preferredContact: 'phone' | 'email' | 'sms';
-  isActive: boolean;
 }
 
-export type CustomerFormData = Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'loyaltyPoints' | 'isActive'>;
+export type CustomerFormData = Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'loyaltyPoints'>;

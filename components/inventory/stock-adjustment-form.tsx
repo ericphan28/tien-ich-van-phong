@@ -10,8 +10,13 @@ interface StockAdjustmentFormProps {
 }
 
 export function StockAdjustmentForm({ product, onSave, onClose }: StockAdjustmentFormProps) {
-  const [formData, setFormData] = useState({
-    adjustmentType: 'increase' as const,
+  const [formData, setFormData] = useState<{
+    adjustmentType: 'increase' | 'decrease' | 'set';
+    quantity: number;
+    reason: string;
+    notes: string;
+  }>({
+    adjustmentType: 'increase',
     quantity: 0,
     reason: '',
     notes: '',

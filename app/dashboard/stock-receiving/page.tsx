@@ -27,6 +27,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ReceivingForm, ReceivingFormData } from "@/components/inventory";
+import type { ReceivingItem } from "@/types/inventory";
 
 export interface PurchaseOrder {
   id: string;
@@ -54,13 +55,14 @@ export interface PurchaseOrderItem {
   sku: string;
   category: string;
   unit: string;
+  expectedQuantity: number;
+  quantity: number;
   orderedQuantity: number;
   receivedQuantity: number;
   pendingQuantity: number;
   unitPrice: number;
   totalPrice: number;
-  expiryDate?: string;
-  lotNumber?: string;
+  status: 'pending' | 'partial' | 'completed';
   isReceived: boolean;
 }
 
@@ -79,22 +81,6 @@ export interface StockReceiving {
   items: ReceivingItem[];
   notes?: string;
   attachments?: string[];
-}
-
-export interface ReceivingItem {
-  id: string;
-  productId: string;
-  productName: string;
-  sku: string;
-  unit: string;
-  expectedQuantity: number;
-  receivedQuantity: number;
-  unitPrice: number;
-  totalPrice: number;
-  lotNumber: string;
-  expiryDate?: string;
-  condition: 'good' | 'damaged' | 'expired';
-  notes?: string;
 }
 
 export default function StockReceivingPage() {
@@ -129,11 +115,14 @@ export default function StockReceivingPage() {
           sku: "RICE001",
           category: "Lương thực",
           unit: "kg",
+          expectedQuantity: 500,
+          quantity: 500,
           orderedQuantity: 500,
           receivedQuantity: 0,
           pendingQuantity: 500,
           unitPrice: 25000,
           totalPrice: 12500000,
+          status: 'pending',
           isReceived: false
         },
         {
@@ -143,11 +132,14 @@ export default function StockReceivingPage() {
           sku: "RICE002", 
           category: "Lương thực",
           unit: "kg",
+          expectedQuantity: 200,
+          quantity: 200,
           orderedQuantity: 200,
           receivedQuantity: 0,
           pendingQuantity: 200,
           unitPrice: 32000,
           totalPrice: 6400000,
+          status: 'pending',
           isReceived: false
         }
       ]
@@ -175,11 +167,14 @@ export default function StockReceivingPage() {
           sku: "PORK001",
           category: "Thịt tươi",
           unit: "kg",
+          expectedQuantity: 50,
+          quantity: 50,
           orderedQuantity: 50,
           receivedQuantity: 20,
           pendingQuantity: 30,
           unitPrice: 180000,
           totalPrice: 9000000,
+          status: 'partial',
           isReceived: false
         }
       ]
@@ -207,11 +202,14 @@ export default function StockReceivingPage() {
           sku: "MILK001",
           category: "Sữa & trứng",
           unit: "hộp",
+          expectedQuantity: 240,
+          quantity: 240,
           orderedQuantity: 240,
           receivedQuantity: 240,
           pendingQuantity: 0,
           unitPrice: 8500,
           totalPrice: 2040000,
+          status: 'completed',
           isReceived: true
         }
       ]
@@ -336,15 +334,15 @@ export default function StockReceivingPage() {
       id: `rcv_${Date.now()}`,
       purchaseOrderId: receivingData.purchaseOrderId,
       receivingNumber: `RCV-${Date.now()}`,
-      receivingDate: receivingData.receivingDate,
+      receivingDate: receivingData.receivedDate,
       locationId: receivingData.locationId,
       supplierId: receivingData.supplierId,
       supplierName: selectedOrder?.supplierName || '',
       receivedBy: receivingData.receivedBy,
       status: 'completed',
-      totalItems: receivingData.items.filter(item => item.receivedQuantity > 0).length,
-      totalValue: receivingData.items.reduce((sum, item) => sum + item.totalPrice, 0),
-      items: receivingData.items.filter(item => item.receivedQuantity > 0),
+      totalItems: receivingData.items.filter((item: ReceivingItem) => item.receivedQuantity > 0).length,
+      totalValue: receivingData.items.reduce((sum: number, item: ReceivingItem) => sum + item.totalPrice, 0),
+      items: receivingData.items.filter((item: ReceivingItem) => item.receivedQuantity > 0),
       notes: receivingData.notes
     };    // Add to receiving history
     setReceivingRecords(prev => [newReceiving, ...prev]);
@@ -353,7 +351,7 @@ export default function StockReceivingPage() {
     if (selectedOrder) {
       setPurchaseOrders(prev => prev.map(order => {
         if (order.id === selectedOrder.id) {
-          const totalReceived = receivingData.items.reduce((sum, item) => sum + item.totalPrice, 0);
+          const totalReceived = receivingData.items.reduce((sum: number, item: ReceivingItem) => sum + item.totalPrice, 0);
           const newReceivedValue = order.receivedValue + totalReceived;
           const isComplete = newReceivedValue >= order.totalValue;
           
@@ -362,7 +360,7 @@ export default function StockReceivingPage() {
             status: isComplete ? 'completed' : 'partial',
             receivedValue: newReceivedValue,
             items: order.items.map(orderItem => {
-              const receivingItem = receivingData.items.find(ri => ri.productId === orderItem.productId);
+              const receivingItem = receivingData.items.find((ri: ReceivingItem) => ri.productId === orderItem.productId);
               if (receivingItem) {
                 return {
                   ...orderItem,

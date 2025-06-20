@@ -3,5 +3,5 @@ export { AddLocationForm } from './add-location-form';
 export { StockAdjustmentForm } from './stock-adjustment-form';
 export { ReceivingForm } from './receiving-form';
 
-// Export types
-export type { Location, ProductStock, StockAdjustmentData } from '@/types/inventory';
+// Export types from shared types
+export type { Location, ProductStock, StockAdjustmentData, ReceivingFormData, ReceivingItem } from '@/types/inventory';

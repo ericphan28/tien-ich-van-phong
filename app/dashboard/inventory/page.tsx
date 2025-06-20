@@ -23,53 +23,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { AddLocationForm, StockAdjustmentForm, StockAdjustmentData } from "@/components/inventory";
-
-export interface Location {
-  id: string;
-  name: string;
-  type: 'store' | 'warehouse' | 'storage';
-  address: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  parentLocationId?: string;
-  isActive: boolean;
-  manager?: string;
-  phone?: string;
-  operatingHours?: string;
-  capacity?: number;
-  currentUtilization?: number;
-}
-
-export interface ProductStock {
-  id: string;
-  productId: string;
-  productName: string;
-  sku: string;
-  category: string;
-  locationId: string;
-  quantity: number;
-  unit: string;
-  minThreshold: number;
-  maxThreshold: number;
-  costPrice: number;
-  sellingPrice: number;
-  lastUpdated: string;
-  status: 'in-stock' | 'low-stock' | 'out-of-stock' | 'overstock';
-  batches: StockBatch[];
-}
-
-export interface StockBatch {
-  id: string;
-  quantity: number;
-  costPrice: number;
-  expiryDate?: string;
-  lotNumber?: string;
-  receivedDate: string;
-  supplierName?: string;
-}
+import { AddLocationForm, StockAdjustmentForm } from "@/components/inventory";
+import type { Location, ProductStock, StockAdjustmentData } from "@/types/inventory";
 
 export interface StockMovement {
   id: string;
@@ -88,7 +43,8 @@ export interface StockMovement {
   notes?: string;
 }
 
-export default function InventoryPage() {  const [selectedLocation, setSelectedLocation] = useState<string>("all");
+export default function InventoryPage() {
+  const [selectedLocation, setSelectedLocation] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
@@ -109,6 +65,7 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
       address: "123 Nguyễn Huệ, Q1, TP.HCM",
       coordinates: { lat: 10.7769, lng: 106.7009 },
       isActive: true,
+      status: "active",
       manager: "Nguyễn Văn A",
       phone: "0901234567",
       operatingHours: "6:00 - 22:00",
@@ -122,6 +79,7 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
       address: "456 Võ Văn Ngân, Thủ Đức, TP.HCM",
       coordinates: { lat: 10.8505, lng: 106.7717 },
       isActive: true,
+      status: "active",
       manager: "Trần Thị B",
       phone: "0907654321",
       operatingHours: "8:00 - 17:00",
@@ -135,6 +93,7 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
       address: "789 Nguyễn Thị Thập, Q7, TP.HCM",
       coordinates: { lat: 10.7411, lng: 106.6978 },
       isActive: true,
+      status: "active",
       manager: "Lê Văn C",
       phone: "0912345678",
       operatingHours: "6:00 - 22:00",
@@ -149,17 +108,23 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
       id: "1",
       productId: "p1",
       productName: "Gạo Tám Xoan",
+      locationId: "1",
+      locationName: "Cửa hàng Quận 1",
+      currentStock: 150,
+      minStock: 50,
+      maxStock: 300,
+      unitCost: 25000,
+      totalValue: 3750000,
+      lastUpdated: "2024-06-19T10:30:00",
+      status: "in-stock",
       sku: "RICE001",
       category: "Lương thực",
-      locationId: "1",
       quantity: 150,
       unit: "kg",
       minThreshold: 50,
       maxThreshold: 300,
       costPrice: 25000,
       sellingPrice: 32000,
-      lastUpdated: "2024-06-19T10:30:00",
-      status: "in-stock",
       batches: [
         {
           id: "b1",
@@ -185,17 +150,23 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
       id: "2",
       productId: "p2",
       productName: "Thịt Heo Ba Chỉ",
+      locationId: "1",
+      locationName: "Cửa hàng Quận 1",
+      currentStock: 25,
+      minStock: 30,
+      maxStock: 100,
+      unitCost: 180000,
+      totalValue: 4500000,
+      lastUpdated: "2024-06-19T15:20:00",
+      status: "low-stock",
       sku: "PORK001",
       category: "Thịt tươi",
-      locationId: "1",
       quantity: 25,
       unit: "kg",
       minThreshold: 30,
       maxThreshold: 100,
       costPrice: 180000,
       sellingPrice: 220000,
-      lastUpdated: "2024-06-19T08:15:00",
-      status: "low-stock",
       batches: [
         {
           id: "b3",
@@ -212,34 +183,46 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
       id: "3",
       productId: "p3",
       productName: "Cà Chua Đà Lạt",
+      locationId: "2",
+      locationName: "Kho Thủ Đức",
+      currentStock: 0,
+      minStock: 20,
+      maxStock: 80,
+      unitCost: 35000,
+      totalValue: 0,
+      lastUpdated: "2024-06-19T06:00:00",
+      status: "out-of-stock",
       sku: "VEG001",
       category: "Rau củ",
-      locationId: "2",
       quantity: 0,
       unit: "kg",
       minThreshold: 20,
       maxThreshold: 80,
       costPrice: 35000,
       sellingPrice: 45000,
-      lastUpdated: "2024-06-19T06:00:00",
-      status: "out-of-stock",
       batches: []
     },
     {
       id: "4",
       productId: "p4",
       productName: "Sữa Tươi Vinamilk",
+      locationId: "3",
+      locationName: "Cửa hàng Quận 7",
+      currentStock: 120,
+      minStock: 50,
+      maxStock: 200,
+      unitCost: 8500,
+      totalValue: 1020000,
+      lastUpdated: "2024-06-19T09:45:00",
+      status: "in-stock",
       sku: "MILK001",
       category: "Sữa & trứng",
-      locationId: "3",
       quantity: 120,
       unit: "hộp",
       minThreshold: 50,
       maxThreshold: 200,
       costPrice: 8500,
       sellingPrice: 12000,
-      lastUpdated: "2024-06-19T09:45:00",
-      status: "in-stock",
       batches: [
         {
           id: "b4",
@@ -258,8 +241,8 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
   const filteredProducts = productStocks.filter(product => {
     const matchesLocation = selectedLocation === "all" || product.locationId === selectedLocation;
     const matchesSearch = product.productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         product.sku.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+                         (product.sku && product.sku.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesCategory = selectedCategory === "all" || (product.category && product.category === selectedCategory);
     const matchesStatus = selectedStatus === "all" || product.status === selectedStatus;
     
     return matchesLocation && matchesSearch && matchesCategory && matchesStatus;
@@ -632,13 +615,13 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
                 <div className="text-right">
                   <p className="text-xs text-zinc-500 dark:text-zinc-400">Giá bán</p>
                   <p className="font-medium text-zinc-900 dark:text-zinc-100">
-                    {formatPrice(product.sellingPrice)}
+                    {formatPrice(product.sellingPrice || 0)}
                   </p>
                 </div>
               </div>
 
               {/* Batch Info */}
-              {product.batches.length > 0 && (
+              {(product.batches && product.batches.length > 0) && (
                 <div>
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">
                     Lô hàng ({product.batches.length})
@@ -657,7 +640,7 @@ export default function InventoryPage() {  const [selectedLocation, setSelectedL
                         )}
                       </div>
                     ))}
-                    {product.batches.length > 2 && (
+                    {product.batches && product.batches.length > 2 && (
                       <p className="text-xs text-zinc-500 dark:text-zinc-400">
                         +{product.batches.length - 2} lô khác
                       </p>

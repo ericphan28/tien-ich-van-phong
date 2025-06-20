@@ -59,12 +59,11 @@ export function AddLocationForm({ location, onSave, onClose }: AddLocationFormPr
             <label className="block text-sm font-medium mb-1">Loại</label>
             <select
               value={formData.type}
-              onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as 'warehouse' | 'store' | 'supplier' }))}
+              onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value as 'warehouse' | 'store' | 'storage' }))}
               className="w-full p-2 border rounded-md"
-            >
-              <option value="warehouse">Kho</option>
+            >              <option value="warehouse">Kho</option>
               <option value="store">Cửa hàng</option>
-              <option value="supplier">Nhà cung cấp</option>
+              <option value="storage">Kho lưu trữ</option>
             </select>
           </div>
           

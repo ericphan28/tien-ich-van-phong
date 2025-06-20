@@ -26,6 +26,7 @@ import { CustomerSelector } from "@/components/pos/customer-selector";
 import { QuickAmountButtons } from "@/components/pos/quick-amount-buttons";
 import { POSCalculator, DiscountType, SellType } from "@/lib/pos-calculator";
 import { useOffline } from "@/hooks/use-offline";
+import type { Customer } from "@/types/customer";
 
 interface Product {
   id: string;
@@ -44,15 +45,6 @@ interface Product {
   status: string;
   image: string | null;
   description?: string;
-}
-
-interface Customer {
-  id: string;
-  name: string;
-  phone: string;
-  email?: string;
-  totalOrders: number;
-  totalSpent: number;
 }
 
 interface CartItem {

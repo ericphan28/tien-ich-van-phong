@@ -14,45 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { CustomerCard, AddCustomerForm, CustomerDetailsModal } from "@/components/customers";
-
-export interface Customer {
-  id: string;
-  name: string;
-  phone: string;
-  email?: string;
-  address?: string;
-  // GPS & Delivery features
-  coordinates?: {
-    lat: number;
-    lng: number;
-    accuracy?: number; // GPS accuracy in meters
-  };
-  addressComponents?: {
-    street?: string;
-    ward?: string; // Phường/Xã
-    district?: string; // Quận/Huyện  
-    city?: string; // Thành phố
-    zipCode?: string;
-  };
-  deliveryNotes?: string; // Ghi chú cho shipper
-  deliveryInstructions?: string; // Hướng dẫn đường đi
-  isDeliveryAvailable?: boolean; // Có ship được không
-  deliveryDistance?: number; // Khoảng cách từ cửa hàng (km)
-  deliveryFee?: number; // Phí ship
-  // Existing fields
-  group: 'VIP' | 'Regular' | 'Wholesale';
-  totalOrders: number;
-  totalSpent: number;
-  lastVisit: string;
-  joinDate: string;
-  notes?: string;
-  birthDate?: string;
-  loyaltyPoints?: number;
-  preferredContact: 'phone' | 'email' | 'sms';
-  isActive: boolean;
-}
-
-export type CustomerFormData = Omit<Customer, 'id' | 'totalOrders' | 'totalSpent' | 'joinDate' | 'loyaltyPoints' | 'isActive'>;
+import type { Customer } from "@/types/customer";
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([    {
@@ -87,7 +49,7 @@ export default function CustomersPage() {
       birthDate: "1985-03-20",
       loyaltyPoints: 1250,
       preferredContact: "phone",
-      isActive: true
+      status: "active"
     },    {
       id: "2", 
       name: "Trần Văn Minh",
@@ -119,7 +81,7 @@ export default function CustomersPage() {
       notes: "Mua số lượng lớn cho công ty",
       loyaltyPoints: 3560,
       preferredContact: "email",
-      isActive: true
+      status: "active"
     },    {
       id: "3",
       name: "Lê Thị Hương",
@@ -135,7 +97,7 @@ export default function CustomersPage() {
       joinDate: "2024-02-28",
       loyaltyPoints: 280,
       preferredContact: "sms",
-      isActive: true
+      status: "active"
     },
     {
       id: "4",
@@ -152,7 +114,7 @@ export default function CustomersPage() {
       birthDate: "1978-11-12",
       loyaltyPoints: 1890,
       preferredContact: "email",
-      isActive: true
+      status: "active"
     },
     {
       id: "5",
@@ -166,7 +128,7 @@ export default function CustomersPage() {
       joinDate: "2024-03-10",
       loyaltyPoints: 120,
       preferredContact: "phone",
-      isActive: false
+      status: "inactive"
     }
   ]);
 
@@ -188,7 +150,7 @@ export default function CustomersPage() {
   // Stats
   const stats = {
     total: customers.length,
-    active: customers.filter(c => c.isActive).length,
+    active: customers.filter(c => c.status === 'active').length,
     vip: customers.filter(c => c.group === 'VIP').length,
     totalSpent: customers.reduce((sum, c) => sum + c.totalSpent, 0)
   };  const addCustomer = (customerData: Partial<Customer>) => {
@@ -215,7 +177,7 @@ export default function CustomersPage() {
       birthDate: customerData.birthDate,
       loyaltyPoints: 0,
       preferredContact: customerData.preferredContact || 'phone',
-      isActive: true
+      status: "active"
     };
     setCustomers(prev => [...prev, newCustomer]);
     setShowAddForm(false);

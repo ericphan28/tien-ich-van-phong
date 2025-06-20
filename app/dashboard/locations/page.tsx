@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { LocationCard, AddLocationForm } from "@/components/inventory";
-import { Location, ProductStock } from "@/app/dashboard/inventory/page";
+import type { Location, ProductStock } from "@/types/inventory";
 
 export default function LocationsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,6 +35,7 @@ export default function LocationsPage() {
       address: "123 Nguyễn Huệ, Q1, TP.HCM",
       coordinates: { lat: 10.7769, lng: 106.7009 },
       isActive: true,
+      status: "active",
       manager: "Nguyễn Văn A",
       phone: "0901234567",
       operatingHours: "6:00 - 22:00",
@@ -48,6 +49,7 @@ export default function LocationsPage() {
       address: "456 Võ Văn Ngân, Thủ Đức, TP.HCM",
       coordinates: { lat: 10.8505, lng: 106.7717 },
       isActive: true,
+      status: "active",
       manager: "Trần Thị B",
       phone: "0907654321",
       operatingHours: "8:00 - 17:00",
@@ -61,6 +63,7 @@ export default function LocationsPage() {
       address: "789 Nguyễn Thị Thập, Q7, TP.HCM",
       coordinates: { lat: 10.7411, lng: 106.6978 },
       isActive: true,
+      status: "active",
       manager: "Lê Văn C",
       phone: "0912345678",
       operatingHours: "6:00 - 22:00",
@@ -74,6 +77,7 @@ export default function LocationsPage() {
       address: "321 Đại lộ Bình Dương, Thuận An, Bình Dương",
       coordinates: { lat: 10.9045, lng: 106.6906 },
       isActive: false,
+      status: "inactive",
       manager: "Phạm Văn D",
       phone: "0918765432",
       operatingHours: "8:00 - 17:00",
@@ -84,10 +88,98 @@ export default function LocationsPage() {
 
   // Mock product data for calculating stats
   const [productStocks] = useState<ProductStock[]>([
-    { id: "1", productId: "p1", productName: "Gạo Tám Xoan", sku: "RICE001", category: "Lương thực", locationId: "1", quantity: 150, unit: "kg", minThreshold: 50, maxThreshold: 300, costPrice: 25000, sellingPrice: 32000, lastUpdated: "2024-06-19T10:30:00", status: "in-stock", batches: [] },
-    { id: "2", productId: "p2", productName: "Thịt Heo Ba Chỉ", sku: "PORK001", category: "Thịt tươi", locationId: "1", quantity: 25, unit: "kg", minThreshold: 30, maxThreshold: 100, costPrice: 180000, sellingPrice: 220000, lastUpdated: "2024-06-19T08:15:00", status: "low-stock", batches: [] },
-    { id: "3", productId: "p3", productName: "Cà Chua Đà Lạt", sku: "VEG001", category: "Rau củ", locationId: "2", quantity: 0, unit: "kg", minThreshold: 20, maxThreshold: 80, costPrice: 35000, sellingPrice: 45000, lastUpdated: "2024-06-19T06:00:00", status: "out-of-stock", batches: [] },
-    { id: "4", productId: "p4", productName: "Sữa Tươi Vinamilk", sku: "MILK001", category: "Sữa & trứng", locationId: "3", quantity: 120, unit: "hộp", minThreshold: 50, maxThreshold: 200, costPrice: 8500, sellingPrice: 12000, lastUpdated: "2024-06-19T09:45:00", status: "in-stock", batches: [] }
+    { 
+      id: "1", 
+      productId: "p1", 
+      productName: "Gạo Tám Xoan", 
+      locationId: "1", 
+      locationName: "Cửa hàng Quận 1",
+      currentStock: 150,
+      minStock: 50,
+      maxStock: 300,
+      unitCost: 25000,
+      totalValue: 3750000,
+      sku: "RICE001", 
+      category: "Lương thực", 
+      quantity: 150, 
+      unit: "kg", 
+      minThreshold: 50, 
+      maxThreshold: 300, 
+      costPrice: 25000, 
+      sellingPrice: 32000, 
+      lastUpdated: "2024-06-19T10:30:00", 
+      status: "in-stock", 
+      batches: [] 
+    },
+    { 
+      id: "2", 
+      productId: "p2", 
+      productName: "Thịt Heo Ba Chỉ", 
+      locationId: "1", 
+      locationName: "Cửa hàng Quận 1",
+      currentStock: 25,
+      minStock: 30,
+      maxStock: 100,
+      unitCost: 180000,
+      totalValue: 4500000,
+      sku: "PORK001", 
+      category: "Thịt tươi", 
+      quantity: 25, 
+      unit: "kg", 
+      minThreshold: 30, 
+      maxThreshold: 100, 
+      costPrice: 180000, 
+      sellingPrice: 220000, 
+      lastUpdated: "2024-06-19T08:15:00", 
+      status: "low-stock", 
+      batches: [] 
+    },
+    { 
+      id: "3", 
+      productId: "p3", 
+      productName: "Cà Chua Đà Lạt", 
+      locationId: "2", 
+      locationName: "Kho Thủ Đức",
+      currentStock: 0,
+      minStock: 20,
+      maxStock: 80,
+      unitCost: 35000,
+      totalValue: 0,
+      sku: "VEG001", 
+      category: "Rau củ", 
+      quantity: 0, 
+      unit: "kg", 
+      minThreshold: 20, 
+      maxThreshold: 80, 
+      costPrice: 35000, 
+      sellingPrice: 45000, 
+      lastUpdated: "2024-06-19T06:00:00", 
+      status: "out-of-stock", 
+      batches: [] 
+    },
+    { 
+      id: "4", 
+      productId: "p4", 
+      productName: "Sữa Tươi Vinamilk", 
+      locationId: "3", 
+      locationName: "Cửa hàng Quận 7",
+      currentStock: 120,
+      minStock: 50,
+      maxStock: 200,
+      unitCost: 8500,
+      totalValue: 1020000,
+      sku: "MILK001", 
+      category: "Sữa & trứng", 
+      quantity: 120, 
+      unit: "hộp", 
+      minThreshold: 50, 
+      maxThreshold: 200, 
+      costPrice: 8500, 
+      sellingPrice: 12000, 
+      lastUpdated: "2024-06-19T09:45:00", 
+      status: "in-stock", 
+      batches: [] 
+    }
   ]);
 
   // Filter locations
