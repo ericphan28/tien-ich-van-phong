@@ -4,7 +4,7 @@ interface QuickAmountButtonsProps {
   onAmountSelect: (amount: number) => void;
 }
 
-export default function QuickAmountButtons({ onAmountSelect }: QuickAmountButtonsProps) {
+export function QuickAmountButtons({ onAmountSelect }: QuickAmountButtonsProps) {
   const amounts = [5, 10, 20, 50, 100, 200, 500];
 
   return (

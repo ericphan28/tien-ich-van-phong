@@ -14,7 +14,7 @@ interface CustomerSelectorProps {
   onSelectCustomer: (customer: Customer | null) => void;
 }
 
-export default function CustomerSelector({ selectedCustomer, onSelectCustomer }: CustomerSelectorProps) {
+export function CustomerSelector({ selectedCustomer, onSelectCustomer }: CustomerSelectorProps) {
   const [customers] = useState<Customer[]>([
     { id: '1', name: 'John Doe', phone: '123-456-7890', address: '123 Main St' },
     { id: '2', name: 'Jane Smith', phone: '987-654-3210', address: '456 Oak Ave' },
