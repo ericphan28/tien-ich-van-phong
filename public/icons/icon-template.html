@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .icon {
+      width: 192px;
+      height: 192px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+    .cart {
+      width: 80px;
+      height: 60px;
+      border: 4px solid white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .cart::before {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 10px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: white;
+    }
+    .cart::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      right: 10px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: white;
+    }
+    .text {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="icon">
+    <div class="cart"></div>
+    <div class="text">POS</div>
+  </div>
+</body>
+</html>
