@@ -1,5 +1,7 @@
 "use client";
 
+// Updated: June 20, 2025 - Trigger Vercel deployment
+
 import { useState } from "react";
 import { SalesChart, CustomPieChart, MultiLineChart } from "@/components/charts/sales-chart";
 import { ExportUtils } from "@/lib/export-utils";
